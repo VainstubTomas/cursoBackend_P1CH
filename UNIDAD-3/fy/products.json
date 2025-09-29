@@ -1,0 +1,14 @@
+[
+  {
+    "id": "18e632f2-fb42-42b1-b2df-792c6bf83114",
+    "title": "iphone 17",
+    "price": 1200,
+    "stock": 10
+  },
+  {
+    "id": "e3e54629-059a-48ad-ad57-1ee3e7069b16",
+    "title": "iphone 15",
+    "price": 550,
+    "stock": 7
+  }
+]
