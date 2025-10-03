@@ -1,1 +1,20 @@
 generacion de package-json => npm init -y
+
+id randoms = crypto.randomUUID()
+
+.trim = validacion de espacio vacios / propio de JS
+
+'ENOENT' = err cuando un archivo no existe
+
+const product = {id:newId, ...newProduct};
+- en este ejemplo se crea un nuevo producto y para no poner TODOS los componentes que define a uno, dir en un objeto ({})
+utilizamos el metodo spread (...newProduct)
+
+JSON.stringify = parsear hacia JSON
+
+estructura de validacion en base a comparacion. const indexProduct = products.findIndex( (product) => product.id === pid);
+    - array.Find((objeto)=>objeto.loQueSeQuiereValidar === comparativo)
+
+cuando actualizamos un array, primero lo guardamos (...products[indexProduct]) despues lo actualizamos, generamos una especie de Backup:
+    - products[indexProduct] = {...products[indexProduct], ...updates}
+

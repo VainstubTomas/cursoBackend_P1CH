@@ -11,13 +11,31 @@ class ProductManager{
         return crypto.randomUUID();
     }
 
-    async addProduct(newProduct){
-        try{
-            //recuperar los productos
-            const fileData = await fs.readFile(this.pathFile, "utf-8");
+    async readFile(){
+        try { 
+            const fileData = await fs.readFile(this.pathFile, 'utf-8');
+
+            if(!fileData.trim()){
+                throw new Error ("Archivo vacio");
+            }
+
             const products = JSON.parse(fileData);
 
-            //generamos un nuevo producto y lo agregamos al array
+            return products; 
+        } catch (error) {
+            if(error.code === 'ENOENT'){
+                console.log("El archivo no existe.");
+            } else if (error.message === "Archivo vacio"){
+                console.log("El archivo esta vacio.");
+            } else {
+                console.log("Error desconocido; ", error.message);
+            }
+        }
+    }
+
+    async addProduct(newProduct){
+        try{
+            const products = await this.readFile();
             const newId = this.generateNewId();
             const product = {id:newId, ...newProduct};
             products.push(product);
@@ -33,10 +51,7 @@ class ProductManager{
 
     async getProducts(){
         try {
-            //recuperar los productos
-            const fileData = await fs.readFile(this.pathFile, "utf-8");
-            const products = JSON.parse(fileData);
-
+            const products = await this.readFile();
             return products;
         } catch (error) {
             throw new Error("Error al traer los productos: " + error.message);
@@ -45,9 +60,7 @@ class ProductManager{
 
     async setProductById(pid, updates){
         try {
-            //recuperar los productos
-            const fileData = await fs.readFile(this.pathFile, "utf-8");
-            const products = JSON.parse(fileData);
+            const products = await this.readFile();
 
             //buscamos el producto por su id
             const indexProduct = products.findIndex( (product) => product.id === pid);
@@ -68,9 +81,7 @@ class ProductManager{
 
     async deleteProductById(pid){
         try {
-            //recuperar los productos
-            const fileData = await fs.readFile(this.pathFile, "utf-8");
-            const products = JSON.parse(fileData);
+            const products = await this.readFile();
 
             //buscamos el producto por su id
             const indexProduct = products.findIndex( (product) => product.id === pid);
@@ -104,10 +115,10 @@ async function main(){
         const products = await productManager.getProducts();
 
         //modify
-        //productManager.setProductById("e3e54629-059a-48ad-ad57-1ee3e7069b16", {price: 550});
+        //productManager.setProductById("e3e54629-059a-48ad-ad57-1ee3e7069b16", {price: 450});
 
         //delete
-        //productManager.deleteProductById("69613ab3-cffa-4aed-8518-72c838b5a407");
+        //productManager.deleteProductById("9168492d-4c57-4b93-ab53-d0a64fd4253c");
 
         console.log(products);
     } catch (error) {
