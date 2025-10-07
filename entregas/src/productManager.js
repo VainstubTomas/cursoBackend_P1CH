@@ -58,6 +58,17 @@ class ProductManager{
         }
     }
 
+    async getProductById(pid){
+        try {
+            const products = await this.readFile();
+            const product =  products.find( (product) => product.id === pid);
+            if(!pid){console.log("producto no encontrado")};
+            return product;
+        } catch (error) {
+            throw new Error("Error al traer el productos: " + error.message);
+        }
+    }
+
     async setProductById(pid, updates){
         try {
             const products = await this.readFile();
@@ -100,3 +111,15 @@ class ProductManager{
 }
 
 export default ProductManager;
+
+//  async function main() {
+//     try {
+//         const cartManager = new ProductManager("./products.json");
+//         const lecturaProductoPID = await cartManager.getProductById("6474d9e6-e3fc-4d77-9fb6-cad4fe2a54cd");
+//         console.log(lecturaProductoPID);
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
+
+// main();

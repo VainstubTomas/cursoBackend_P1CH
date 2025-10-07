@@ -18,3 +18,4 @@ estructura de validacion en base a comparacion. const indexProduct = products.fi
 cuando actualizamos un array, primero lo guardamos (...products[indexProduct]) despues lo actualizamos, generamos una especie de Backup:
     - products[indexProduct] = {...products[indexProduct], ...updates}
 
+nodemon
