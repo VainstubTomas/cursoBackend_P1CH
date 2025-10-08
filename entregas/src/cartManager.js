@@ -61,9 +61,11 @@ class CartManager{
            const cart = await this.getCartById(cid);
 
            const index = carts.findIndex((cart)=>cart.id===cid);
+           //Se define el indice que se debe actualizar al cargar el prod (writeFile)
            carts[index] = cart;
            
            const product = await productManager.getProductById(pid);
+           
            const existingItem = cart.products.find((product)=>product.quantity >= 1);
 
            if(!existingItem){
