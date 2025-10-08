@@ -65,7 +65,7 @@ class ProductManager{
             if(!pid){console.log("producto no encontrado")};
             return product;
         } catch (error) {
-            throw new Error("Error al traer el productos: " + error.message);
+            throw new Error("Error al traer el producto: " + error.message);
         }
     }
 
@@ -114,7 +114,7 @@ export default ProductManager;
 
 //  async function main() {
 //     try {
-//         const cartManager = new ProductManager("./products.json");
+//         const cartManager = new ProductManager("./src/products.json");
 //         const lecturaProductoPID = await cartManager.getProductById("6474d9e6-e3fc-4d77-9fb6-cad4fe2a54cd");
 //         console.log(lecturaProductoPID);
 //     } catch (error) {

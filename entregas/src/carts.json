@@ -1,10 +1,20 @@
 [
   {
-    "id": "66f2ad1b-50bb-445d-8da5-33fd8ddc1c97",
-    "products": []
+    "id": "f6053597-27ca-4141-9bc0-a44890f82aa2",
+    "products": [
+      {
+        "product": "6474d9e6-e3fc-4d77-9fb6-cad4fe2a54cd",
+        "quantity": 7
+      }
+    ]
   },
   {
-    "id": "242a173f-603f-4149-9c2b-266af39766fb",
-    "products": []
+    "id": "ffa5f1aa-604c-42a7-a99d-83e522c4b7c6",
+    "products": [
+      {
+        "product": "6474d9e6-e3fc-4d77-9fb6-cad4fe2a54cd",
+        "quantity": 1
+      }
+    ]
   }
 ]

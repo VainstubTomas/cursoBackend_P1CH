@@ -2,7 +2,7 @@ import fs from "fs/promises";
 import crypto from "crypto";
 import ProductManager from "./productManager.js";
 
-const productManager = new ProductManager("./products.json");
+const productManager = new ProductManager("./src/products.json");
 
 class CartManager{
     constructor(pathFile){
@@ -51,37 +51,49 @@ class CartManager{
             if(!cid){console.log("carrito no encontrado")};
             return cart;
         } catch (error) {
-            throw new Error("Error al crear nuevo carrito: " + error.message);
+            throw new Error("Error al buscar carrito: " + error.message);
         }
     }
-    // API/CARTS/:CID/PRODUCTS/:PID
+    
     async addProduct(cid, pid){
         try {
+           const carts = await this.readFile();
            const cart = await this.getCartById(cid);
+
+           const index = carts.findIndex((cart)=>cart.id===cid);
+           carts[index] = cart;
+           
            const product = await productManager.getProductById(pid);
-           const existingItem = cart.products.find((product)=>product.id===pid);
+           const existingItem = cart.products.find((product)=>product.quantity >= 1);
+
            if(!existingItem){
                 cart.products.push({product:product.id, quantity:1});
-                return cart;
+                await fs.writeFile(this.pathFile, JSON.stringify(carts, null, 2), "utf-8");
+                console.log("Nuevo producto cargado en el carrito.");
            }else if(existingItem){
-                existingItem.quantity+=1;
-                return cart;
+                existingItem.quantity++;
+                await fs.writeFile(this.pathFile, JSON.stringify(carts, null, 2), "utf-8");
+                console.log("Al producto se le ha sumado una unidad.");
            };
+
+           return cart;
         } catch (error) {
             throw new Error("Error al agregar producto: " + error.message);
         }
     }
 };
 
-// export default CartManager;
+export default CartManager;
 
- async function main() {
-     try {
-         const cartManager = new CartManager("./src/carts.json");
-         await cartManager.addProduct("66f2ad1b-50bb-445d-8da5-33fd8ddc1c97","6474d9e6-e3fc-4d77-9fb6-cad4fe2a54cd");
-     } catch (error) {
-         console.log(error);
-     }
- }
+//  async function main() {
+//      try {
+//          const cartManager = new CartManager("./src/carts.json");
+//          //const nuevoCart = cartManager.newCart();
+//          const subirProducto = await cartManager.addProduct("f6053597-27ca-4141-9bc0-a44890f82aa2","6474d9e6-e3fc-4d77-9fb6-cad4fe2a54cd");
+//          console.log(subirProducto);
+//      } catch (error) {
+//          console.log(error);
+//      }
+//  }
 
-main();
+// main();
