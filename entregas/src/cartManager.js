@@ -1,5 +1,8 @@
 import fs from "fs/promises";
 import crypto from "crypto";
+import ProductManager from "./productManager.js";
+
+const productManager = new ProductManager("./products.json");
 
 class CartManager{
     constructor(pathFile){
@@ -51,18 +54,34 @@ class CartManager{
             throw new Error("Error al crear nuevo carrito: " + error.message);
         }
     }
+    // API/CARTS/:CID/PRODUCTS/:PID
+    async addProduct(cid, pid){
+        try {
+           const cart = await this.getCartById(cid);
+           const product = await productManager.getProductById(pid);
+           const existingItem = cart.products.find((product)=>product.id===pid);
+           if(!existingItem){
+                cart.products.push({product:product.id, quantity:1});
+                return cart;
+           }else if(existingItem){
+                existingItem.quantity+=1;
+                return cart;
+           };
+        } catch (error) {
+            throw new Error("Error al agregar producto: " + error.message);
+        }
+    }
 };
 
-export default CartManager;
+// export default CartManager;
 
-//  async function main() {
-//      try {
-//          const cartManager = new CartManager("./src/carts.json");
-//          const getProd = await cartManager.getCartById("242a173f-603f-4149-9c2b-266af39766fb");
-//         console.log(getProd);
-//      } catch (error) {
-//          console.log(error);
-//      }
-//  }
+ async function main() {
+     try {
+         const cartManager = new CartManager("./src/carts.json");
+         await cartManager.addProduct("66f2ad1b-50bb-445d-8da5-33fd8ddc1c97","6474d9e6-e3fc-4d77-9fb6-cad4fe2a54cd");
+     } catch (error) {
+         console.log(error);
+     }
+ }
 
-// main();
+main();
