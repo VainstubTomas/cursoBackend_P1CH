@@ -1,0 +1,8 @@
+-CARPETA PUBLIC: Para almacenar elementos estaticos (imagenes, css).
+
+-CARPETA ROUTES: Se utiliza esta carpeta para modularizar el codigo y tener mayor organizacion, en este caso con los diferentes endpoints, mediante el uso de middlewares
+
+-MIDDLEWARE: Intermediario entre lo que solicita o envia el cliente y el servidor.
+
+-CARPETA VIEWS: Se suele utilizar desde el back generalmente solo cuando se utiliza un motor de plantilla y es en donde se generar diferentes layouts por cada 'pantalla' que se necesita realizar de manera dinamica; Es en la CARPETA LAYOUTS donde se determina mediante un archivo main.handlebars (HTML) que lo que sera dinamico sera el cuerpo de los layouts mediante 3 llaves y la etiqueta {{{body}}}
+
