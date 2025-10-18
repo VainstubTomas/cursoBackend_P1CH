@@ -19,3 +19,5 @@ cuando actualizamos un array, primero lo guardamos (...products[indexProduct]) d
     - products[indexProduct] = {...products[indexProduct], ...updates}
 
 nodemon
+
+multer - para poder recibir archivos
