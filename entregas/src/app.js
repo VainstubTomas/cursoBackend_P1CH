@@ -88,6 +88,17 @@ app.get("/api/carts/:cid", async (req, res) => {
     }
 })
 
+app.post("/api/carts/:cid/products/:pid", async (req, res) => {
+    try {
+       const cid = req.params.cid;
+       const pid = req.params.pid;
+       const add = await cartManager.addProduct(cid, pid);
+       res.status(201).json({message:"producto agregado correctamente", add});
+    } catch (error) {
+       res.status(500).json({message: error.message}); 
+    }
+})
+
 app.listen(8080,()=>{
     console.log("servidor iniciado correctamente en el puerto 8080");
 });
