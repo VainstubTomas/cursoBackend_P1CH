@@ -8,7 +8,7 @@
     "status": "True",
     "stock": 50,
     "category": "Phones",
-    "thumbnails": []
+    "thumbnails": "/images/iphone17.webp"
   },
   {
     "id": "3529fa41-65f8-4996-97e6-b17acb58509c",
@@ -19,6 +19,6 @@
     "status": "True",
     "stock": 50,
     "category": "Phones",
-    "thumbnails": []
+    "thumbnails": "/images/iphone17Pro.png"
   }
 ]
