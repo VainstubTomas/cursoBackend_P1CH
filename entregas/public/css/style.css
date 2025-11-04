@@ -1,3 +1,14 @@
 .productImage{
     height: 300px;
 }
+
+#addProductsForm{
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    gap: 5px;
+}
+
+#productsCardsContainer{
+    display: flex;
+}
