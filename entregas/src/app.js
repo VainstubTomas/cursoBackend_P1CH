@@ -33,8 +33,20 @@ io.on("connection", (socket)=>{
             io.emit("products updated", {products: updatedProducts})  
         } catch (error) {
             console.error("Error al agregar producto por WebSocket:", error);
-            io.emit("error", { message: "Fallo al guardar producto." });
+            socket.emit("error", { message: "Fallo al guardar producto." });
         }
+    });
+
+    //delete products
+    socket.on("delete product", async(pid)=>{
+        try {
+            await productManager.deleteProductById(pid);
+            const updatedProducts = await productManager.getProducts();
+            io.emit("products updated", {products: updatedProducts})
+        } catch (error) {
+            console.error("Error al eliminar producto por WebSocket:", error);
+            socket.emit("error", { message: "Fallo al eliminar el producto." });
+        }  
     });
 });
 

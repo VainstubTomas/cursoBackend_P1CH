@@ -9,16 +9,5 @@
     "stock": 50,
     "category": "Phones",
     "thumbnails": "/images/iphone17.webp"
-  },
-  {
-    "id": "3529fa41-65f8-4996-97e6-b17acb58509c",
-    "title": "iphone17 Pro",
-    "description": "Apple industry. Pro model",
-    "code": "AAAP",
-    "price": 1500,
-    "status": "True",
-    "stock": 50,
-    "category": "Phones",
-    "thumbnails": "/images/iphone17Pro.png"
   }
 ]

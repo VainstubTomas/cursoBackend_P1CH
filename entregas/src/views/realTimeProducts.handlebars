@@ -25,7 +25,7 @@
                     <img src={{this.thumbnails}} alt="imagen producto" class="productImage">
                     <h2>{{this.title}}</h2>
                     <h3>Precio: ${{this.price}}</h3>
-                    <button class="delete-product" data-product-id="${product.id}">Eliminar</button>
+                    <button class="delete-product-button" data-pid={{this.id}}>Eliminar</button>
                 </li>
             </div>
             {{/each}}
@@ -60,21 +60,20 @@
             status: status.value,
             stock: stock.value,
             category: category.value,
-            thumbnails: `/images/${thumbnails.value}`
+            thumbnails: thumbnails.value
         };
 
         socket.emit("new product", productData);
     });
 
     const createProductCardHTML = (product) => {
-        // Usamos Plantillas Literales (Template Literals) para replicar tu HTML
         return `
             <div class="productCard">
                 <li>
                     <img src="${product.thumbnails}" alt="imagen producto" class="productImage">
                     <h2>${product.title}</h2>
                     <h3>Precio: $${product.price}</h3>
-                    <button class="delete-product" data-product-id="${product.id}">Eliminar</button>
+                    <button class="delete-product-button" data-pid=${product.id}>Eliminar</button>
                 </li>
             </div>
         `;
@@ -88,5 +87,13 @@
             htmlContent += createProductCardHTML(product);
         });
         pContainer.innerHTML = htmlContent;
+    });
+
+    document.body.addEventListener("click", (e)=>{
+        if(e.target.classList.contains('delete-product-button')){
+            e.preventDefault();
+            const pid = e.target.dataset.pid;
+            socket.emit("delete product", pid);
+        };
     });
 </script>
