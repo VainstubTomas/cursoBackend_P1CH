@@ -4,15 +4,15 @@
     <div>
         <h2>Agregue un producto nuevo</h2>
 
-        <form id="addProductsForm" action="http://localhost:8080/api/products" method="post" enctype="multipart/form-data">
-            <input type="text" name="title" placeholder="nombre del producto">
-            <input type="text" name="description" placeholder="descripción del producto">
-            <input type="text" name="code" placeholder="codigo del producto">
-            <input type="number" name="price" placeholder="precio del producto">
-            <input type="text" name="status" placeholder="estado del producto">
-            <input type="number" name="stock" placeholder="cantidad en stock">
-            <input type="text" name="category" placeholder="categoria del producto">
-            <input type="file" name="thumbnails" placeholder="imagen del producto">
+        <form id="addProductsForm">
+            <input type="text" name="title" id="productTitle" placeholder="nombre del producto">
+            <input type="text" name="description" id="productDescription" placeholder="descripción del producto">
+            <input type="text" name="code" id="productCode" placeholder="codigo del producto">
+            <input type="number" name="price" id="productPrice" placeholder="precio del producto">
+            <input type="text" name="status" id="productStatus" placeholder="estado del producto">
+            <input type="number" name="stock" id="productStock" placeholder="cantidad en stock">
+            <input type="text" name="category" id="productCategory" placeholder="categoria del producto">
+            <input type="file" name="thumbnails" id="productThumb" placeholder="imagen del producto">
             <button type="submit">Agregar producto</button>
         </form>
 
@@ -25,6 +25,7 @@
                     <img src={{this.thumbnails}} alt="imagen producto" class="productImage">
                     <h2>{{this.title}}</h2>
                     <h3>Precio: ${{this.price}}</h3>
+                    <button class="delete-product" data-product-id="${product.id}">Eliminar</button>
                 </li>
             </div>
             {{/each}}
@@ -38,8 +39,54 @@
     const socket = io();
 
     //formulario
-    //tomar variables del form x id
+    const form = document.getElementById("addProductsForm");
+    const title = document.getElementById("productTitle");
+    const description = document.getElementById("productDescription");
+    const code = document.getElementById("productCode");
+    const price = document.getElementById("productPrice");
+    const status = document.getElementById("productStatus");
+    const stock = document.getElementById("productStock");
+    const category = document.getElementById("productCategory");
+    const thumbnails = document.getElementById("productThumb");
     //definir evento al formulario
+    form.addEventListener("submit", (e)=>{
+        e.preventDefault();
+
+        const productData = {
+            title: title.value,
+            description: description.value,
+            code: code.value,
+            price: price.value,
+            status: status.value,
+            stock: stock.value,
+            category: category.value,
+            thumbnails: `/images/${thumbnails.value}`
+        };
+
+        socket.emit("new product", productData);
+    });
+
+    const createProductCardHTML = (product) => {
+        // Usamos Plantillas Literales (Template Literals) para replicar tu HTML
+        return `
+            <div class="productCard">
+                <li>
+                    <img src="${product.thumbnails}" alt="imagen producto" class="productImage">
+                    <h2>${product.title}</h2>
+                    <h3>Precio: $${product.price}</h3>
+                    <button class="delete-product" data-product-id="${product.id}">Eliminar</button>
+                </li>
+            </div>
+        `;
+    };
 
     //con un socket on tomamos la lista de productos actualizada desde io
+    socket.on("products updated", (data)=>{
+        const pContainer = document.getElementById("productsCardsContainer");
+        let htmlContent = "";
+        data.products.forEach((product)=>{
+            htmlContent += createProductCardHTML(product);
+        });
+        pContainer.innerHTML = htmlContent;
+    });
 </script>

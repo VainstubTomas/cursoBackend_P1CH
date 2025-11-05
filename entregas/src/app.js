@@ -3,7 +3,7 @@ import {engine} from "express-handlebars";
 import {Server} from 'socket.io';
 import http from 'http';
 import viewsRouter from "./routes/views.router.js";
-import productRouter from "./routes/products.router.js";
+import ProductManager from "./productManager.js";
 
 const app = express();
 app.use(express.json());
@@ -13,6 +13,8 @@ const io = new Server(server);
 
 //public (static elements) definition
 app.use(express.static("public"));
+//product manager instance
+const productManager = new ProductManager("./src/products.json");
 
 //handlebars config
 app.engine("handlebars", engine());
@@ -23,13 +25,21 @@ app.set("views", "./src/views");
 io.on("connection", (socket)=>{
     console.log("Cliente id:"+socket.id+" conectado al servidor");
 
-    //socket on para recibir el nuevo posteo desde el formualrio del cliente
-        //dentro de este proceso tambien se realiza el emit
+    //new products from client form
+    socket.on("new product", async(productData)=>{
+        try {
+            await productManager.addProduct(productData); 
+            const updatedProducts = await productManager.getProducts();
+            io.emit("products updated", {products: updatedProducts})  
+        } catch (error) {
+            console.error("Error al agregar producto por WebSocket:", error);
+            io.emit("error", { message: "Fallo al guardar producto." });
+        }
+    });
 });
 
 //endpoints
 app.use('/', viewsRouter);
-app.use('/api/products', productRouter);
 
 server.listen(8080,()=>{
     console.log("servidor iniciado correctamente en el puerto 8080");
