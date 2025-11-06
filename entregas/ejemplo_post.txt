@@ -1,0 +1,15 @@
+A continuacion se deja un ejemplo paso a paso para enviar un nuevo producto mediante el metodo POST (http):
+*La prueba se desarrollo en Postman:
+1) Dentro de Postman u otra aplicacion configurar la URL: http://localhost:8080/api/products/ 
+2) Definir metodo POST
+3) Dirigirse a "body" y seleccionar "form-data" como formato de envio de datos
+4) Colocar datos de nuevo producto. Dejo ejemplo que he realizado:
+ (key/type/value)
+ -title/text/Iphone 17 Pro Max
+ -description/text/Iphone 17 Pro Max
+ -code/text/XCXC
+ -price/text/1250
+ -status/text/true
+ -category/text/Phones
+ -thumbnails/file/seleccionar imagen
+5) Enviar
