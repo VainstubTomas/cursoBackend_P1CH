@@ -49,24 +49,44 @@
     const category = document.getElementById("productCategory");
     const thumbnails = document.getElementById("productThumb");
     //definir evento al formulario
-    form.addEventListener("submit", (e)=>{
+    form.addEventListener("submit", async(e)=>{
         e.preventDefault();
 
-        const productData = {
-            title: title.value,
-            description: description.value,
-            code: code.value,
-            price: price.value,
-            status: status.value,
-            stock: stock.value,
-            category: category.value,
-            thumbnails: thumbnails.value
-        };
+        const formData = new FormData();
+        //adjuntamos info del producto
+        formData.append("title", title.value);
+        formData.append("description", description.value);
+        formData.append("code", code.value);
+        formData.append("price", price.value);
+        formData.append("status", status.value);
+        formData.append("stock", stock.value);
+        formData.append("category", category.value);
+        //adjuntamos archivos
+        if(thumbnails.files.length > 0){
+            for (const file of thumbnails.files){
+                formData.append("thumbnails", file);
+            }
+        }
 
-        socket.emit("new product", productData);
+        try{
+            const response = await fetch("/api/products", {
+                method: "POST",
+                body: formData,
+            });
+
+            if(!response.ok){
+                const error = await response.json();
+                throw new Error(error.error || "Error agregando producto nuevo.");
+            }
+
+            const product = await response.json();
+            console.log("Producto agregado correctamente", product);
+        } catch (error) {
+            console.log(error);
+        };
     });
 
-    const createProductCardHTML = (product) => {
+     const createProductCardHTML = (product) => {
         return `
             <div class="productCard">
                 <li>
@@ -79,16 +99,17 @@
         `;
     };
 
-    //con un socket on tomamos la lista de productos actualizada desde io
+    //con un socket on tomamos la lista de productos actualizada desde http/io
     socket.on("products updated", (data)=>{
         const pContainer = document.getElementById("productsCardsContainer");
         let htmlContent = "";
-        data.products.forEach((product)=>{
+        data.forEach((product)=>{
             htmlContent += createProductCardHTML(product);
         });
         pContainer.innerHTML = htmlContent;
     });
 
+    //evento para eliminar productos
     document.body.addEventListener("click", (e)=>{
         if(e.target.classList.contains('delete-product-button')){
             e.preventDefault();
