@@ -12,15 +12,15 @@
     ]
   },
   {
-    "id": "4987e42a-388e-4892-a0a8-11ddcceb4988",
-    "title": "Iphone 17 Air",
-    "description": "Apple industry. Air model",
-    "code": "ASDd",
-    "price": 1500,
+    "id": "e0519214-7985-4a98-b535-6fd060b1e457",
+    "title": "Iphone 17 Pro",
+    "description": "Apple industry. Pro model",
+    "code": "IPHO",
+    "price": 1200,
     "status": null,
     "category": "Phones",
     "thumbnails": [
-      "/images/1762390746729-1762387466838-1760806011044-iPhone17-Air.png"
+      "/images/1762432150343-iphone17.webp"
     ]
   }
 ]

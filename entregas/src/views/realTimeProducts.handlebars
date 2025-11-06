@@ -5,14 +5,14 @@
         <h2>Agregue un producto nuevo</h2>
 
         <form id="addProductsForm">
-            <input type="text" name="title" id="productTitle" placeholder="nombre del producto">
-            <input type="text" name="description" id="productDescription" placeholder="descripción del producto">
-            <input type="text" name="code" id="productCode" placeholder="codigo del producto">
-            <input type="number" name="price" id="productPrice" placeholder="precio del producto">
-            <input type="text" name="status" id="productStatus" placeholder="estado del producto">
-            <input type="number" name="stock" id="productStock" placeholder="cantidad en stock">
-            <input type="text" name="category" id="productCategory" placeholder="categoria del producto">
-            <input type="file" name="thumbnails" id="productThumb" placeholder="imagen del producto">
+            <input type="text" name="title" id="productTitle" placeholder="nombre del producto" required>
+            <input type="text" name="description" id="productDescription" placeholder="descripción del producto" required>
+            <input type="text" name="code" id="productCode" placeholder="codigo del producto" required>
+            <input type="number" name="price" id="productPrice" placeholder="precio del producto" required>
+            <input type="text" name="status" id="productStatus" placeholder="estado del producto" required>
+            <input type="number" name="stock" id="productStock" placeholder="cantidad en stock" required>
+            <input type="text" name="category" id="productCategory" placeholder="categoria del producto" required>
+            <input type="file" name="thumbnails" id="productThumb" placeholder="imagen del producto" required>
             <button type="submit">Agregar producto</button>
         </form>
 
