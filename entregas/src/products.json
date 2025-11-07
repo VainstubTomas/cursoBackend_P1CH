@@ -8,7 +8,7 @@
     "status": null,
     "category": "Headphones",
     "thumbnails": [
-      "/images/1762390698798-airpodsPRO.webp"
+      "/images/airpodsPRO.webp"
     ]
   },
   {
@@ -20,7 +20,19 @@
     "status": null,
     "category": "Phones",
     "thumbnails": [
-      "/images/1762432150343-iphone17.webp"
+      "/images/iphone17Pro.png"
+    ]
+  },
+  {
+    "id": "0d7e282a-2661-47e8-a9f4-08b41a235fa4",
+    "title": "Iphone 17 Air",
+    "description": "Apple industry. Air model",
+    "code": "SSFF",
+    "price": 1900,
+    "status": null,
+    "category": "Phones",
+    "thumbnails": [
+      "/images/1760806011044-iPhone17-Air.png"
     ]
   }
 ]
