@@ -1,34 +1,36 @@
 <div>
-    <h1>Real Time Products</h1>
+    <h1 class="display-1">Real Time Products</h1>
 
     <div>
-        <h2>Agregue un producto nuevo</h2>
+        <h2 class="display-2">Agregue un producto nuevo</h2>
 
         <form id="addProductsForm">
-            <input type="text" name="title" id="productTitle" placeholder="nombre del producto">
-            <input type="text" name="description" id="productDescription" placeholder="descripción del producto">
-            <input type="text" name="code" id="productCode" placeholder="codigo del producto">
-            <input type="number" name="price" id="productPrice" placeholder="precio del producto">
-            <input type="text" name="status" id="productStatus" placeholder="estado del producto">
-            <input type="number" name="stock" id="productStock" placeholder="cantidad en stock">
-            <input type="text" name="category" id="productCategory" placeholder="categoria del producto">
-            <input type="file" name="thumbnails" id="productThumb" placeholder="imagen del producto">
-            <button type="submit">Agregar producto</button>
+            <input  class="form-control" type="text" name="title" id="productTitle" placeholder="Nombre del producto" required>
+            <input class="form-control" type="text" name="description" id="productDescription" placeholder="Descripción del producto" required>
+            <input class="form-control" type="text" name="code" id="productCode" placeholder="Codigo del producto" required>
+            <input class="form-control" type="number" name="price" id="productPrice" placeholder="Precio del producto" required>
+            <input class="form-control" type="text" name="status" id="productStatus" placeholder="Estado del producto" required>
+            <input class="form-control" type="number" name="stock" id="productStock" placeholder="Cantidad en stock" required>
+            <input class="form-control" type="text" name="category" id="productCategory" placeholder="Categoria del producto" required>
+            <input class="form-control" type="file" name="thumbnails" id="productThumb" placeholder="Imagen del producto" required>
+            <button class="btn btn-dark" type="submit">Agregar producto</button>
         </form>
 
-        <h2>Lista productos en vivo</h2>
+        <h2 class="display-2">Lista productos en vivo</h2>
 
         <div id="productsCardsContainer">
-            {{#each products}}
-            <div class="productCard">
-                <li>
-                    <img src={{this.thumbnails}} alt="imagen producto" class="productImage">
-                    <h2>{{this.title}}</h2>
-                    <h3>Precio: ${{this.price}}</h3>
-                    <button class="delete-product-button" data-pid={{this.id}}>Eliminar</button>
-                </li>
+            <div id="products-list-wrapper">
+                {{#each products}}
+                <div class="card">
+                    <li>
+                        <img src={{this.thumbnails}} alt="imagen producto" class="productImage">
+                        <h2 class="display-3">{{this.title}}</h2>
+                        <h3 class="display-4">Precio: ${{this.price}}</h3>
+                        <button class="delete-product-button btn btn-dark" data-pid={{this.id}}>Eliminar</button>
+                    </li>
+                </div>
+                {{/each}}
             </div>
-            {{/each}}
         </div>
     </div>
 </div>
@@ -49,46 +51,70 @@
     const category = document.getElementById("productCategory");
     const thumbnails = document.getElementById("productThumb");
     //definir evento al formulario
-    form.addEventListener("submit", (e)=>{
+    form.addEventListener("submit", async(e)=>{
         e.preventDefault();
 
-        const productData = {
-            title: title.value,
-            description: description.value,
-            code: code.value,
-            price: price.value,
-            status: status.value,
-            stock: stock.value,
-            category: category.value,
-            thumbnails: thumbnails.value
-        };
+        const formData = new FormData();
+        //adjuntamos info del producto
+        formData.append("title", title.value);
+        formData.append("description", description.value);
+        formData.append("code", code.value);
+        formData.append("price", price.value);
+        formData.append("status", status.value);
+        formData.append("stock", stock.value);
+        formData.append("category", category.value);
+        //adjuntamos archivos
+        if(thumbnails.files.length > 0){
+            for (const file of thumbnails.files){
+                formData.append("thumbnails", file);
+            }
+        }
 
-        socket.emit("new product", productData);
+        try{
+            const response = await fetch("/api/products", {
+                method: "POST",
+                body: formData,
+            });
+
+            if(!response.ok){
+                const error = await response.json();
+                throw new Error(error.error || "Error agregando producto nuevo.");
+            }
+
+            const product = await response.json();
+            console.log("Producto agregado correctamente", product);
+
+            form.reset();
+            thumbnails.value="";
+        } catch (error) {
+            console.log(error);
+        };
     });
 
-    const createProductCardHTML = (product) => {
+     const createProductCardHTML = (product) => {
         return `
-            <div class="productCard">
+            <div class="card">
                 <li>
                     <img src="${product.thumbnails}" alt="imagen producto" class="productImage">
-                    <h2>${product.title}</h2>
-                    <h3>Precio: $${product.price}</h3>
-                    <button class="delete-product-button" data-pid=${product.id}>Eliminar</button>
+                    <h2 class="display-3">${product.title}</h2>
+                    <h3 class="display-4">Precio: $${product.price}</h3>
+                    <button class="delete-product-button btn btn-dark" data-pid="${product.id}">Eliminar</button>
                 </li>
             </div>
-        `;
+            `;
     };
 
-    //con un socket on tomamos la lista de productos actualizada desde io
+    //con un socket on tomamos la lista de productos actualizada desde http/io
     socket.on("products updated", (data)=>{
-        const pContainer = document.getElementById("productsCardsContainer");
+        const pContainer = document.getElementById("products-list-wrapper");
         let htmlContent = "";
-        data.products.forEach((product)=>{
+        data.forEach((product)=>{
             htmlContent += createProductCardHTML(product);
         });
         pContainer.innerHTML = htmlContent;
     });
 
+    //evento para eliminar productos
     document.body.addEventListener("click", (e)=>{
         if(e.target.classList.contains('delete-product-button')){
             e.preventDefault();

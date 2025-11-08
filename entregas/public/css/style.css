@@ -1,5 +1,10 @@
+body{
+    margin-left: 20px;
+}
+
 .productImage{
-    height: 300px;
+    height: auto;
+    max-width: 300px;
 }
 
 #addProductsForm{
@@ -9,10 +14,38 @@
     gap: 5px;
 }
 
-#productsCardsContainer{
-    display: flex;
-}
-
 li{
     list-style: none;
+}
+
+.display-1{
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.display-2{
+    font-size: 30px;
+}
+
+.display-3{
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.display-4{
+    font-size: 20px;
+}
+
+.card{
+    margin: 20px;
+    padding: 5px;
+    max-width: 350px;
+}
+
+#products-list-wrapper{
+    display: grid;
+    /* Define 4 columnas de igual tamaño (1fr) */
+    grid-template-columns: repeat(4, 1fr); 
+    /* El gap es el espacio entre las columnas y filas */
+    gap: 20px;
 }

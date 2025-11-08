@@ -1,13 +1,38 @@
 [
   {
-    "id": "6474d9e6-e3fc-4d77-9fb6-cad4fe2a54cd",
-    "title": "iphone17",
-    "description": "Apple industry. Basic model",
-    "code": "AAAA",
-    "price": 1300,
-    "status": "True",
-    "stock": 50,
+    "id": "124a8bf0-88d9-40a4-9919-0e83f221527d",
+    "title": "AirPods Pro",
+    "description": "Apple industry. Airpods PRO",
+    "code": "ASDR",
+    "price": 500,
+    "status": null,
+    "category": "Headphones",
+    "thumbnails": [
+      "/images/airpodsPRO.webp"
+    ]
+  },
+  {
+    "id": "e0519214-7985-4a98-b535-6fd060b1e457",
+    "title": "Iphone 17 Pro",
+    "description": "Apple industry. Pro model",
+    "code": "IPHO",
+    "price": 1200,
+    "status": null,
     "category": "Phones",
-    "thumbnails": "/images/iphone17.webp"
+    "thumbnails": [
+      "/images/iphone17Pro.png"
+    ]
+  },
+  {
+    "id": "0d7e282a-2661-47e8-a9f4-08b41a235fa4",
+    "title": "Iphone 17 Air",
+    "description": "Apple industry. Air model",
+    "code": "SSFF",
+    "price": 1900,
+    "status": null,
+    "category": "Phones",
+    "thumbnails": [
+      "/images/1760806011044-iPhone17-Air.png"
+    ]
   }
 ]
