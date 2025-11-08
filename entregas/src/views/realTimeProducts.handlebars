@@ -1,0 +1,99 @@
+<div>
+    <h1>Real Time Products</h1>
+
+    <div>
+        <h2>Agregue un producto nuevo</h2>
+
+        <form id="addProductsForm">
+            <input type="text" name="title" id="productTitle" placeholder="nombre del producto">
+            <input type="text" name="description" id="productDescription" placeholder="descripción del producto">
+            <input type="text" name="code" id="productCode" placeholder="codigo del producto">
+            <input type="number" name="price" id="productPrice" placeholder="precio del producto">
+            <input type="text" name="status" id="productStatus" placeholder="estado del producto">
+            <input type="number" name="stock" id="productStock" placeholder="cantidad en stock">
+            <input type="text" name="category" id="productCategory" placeholder="categoria del producto">
+            <input type="file" name="thumbnails" id="productThumb" placeholder="imagen del producto">
+            <button type="submit">Agregar producto</button>
+        </form>
+
+        <h2>Lista productos en vivo</h2>
+
+        <div id="productsCardsContainer">
+            {{#each products}}
+            <div class="productCard">
+                <li>
+                    <img src={{this.thumbnails}} alt="imagen producto" class="productImage">
+                    <h2>{{this.title}}</h2>
+                    <h3>Precio: ${{this.price}}</h3>
+                    <button class="delete-product-button" data-pid={{this.id}}>Eliminar</button>
+                </li>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+    const socket = io();
+
+    //formulario
+    const form = document.getElementById("addProductsForm");
+    const title = document.getElementById("productTitle");
+    const description = document.getElementById("productDescription");
+    const code = document.getElementById("productCode");
+    const price = document.getElementById("productPrice");
+    const status = document.getElementById("productStatus");
+    const stock = document.getElementById("productStock");
+    const category = document.getElementById("productCategory");
+    const thumbnails = document.getElementById("productThumb");
+    //definir evento al formulario
+    form.addEventListener("submit", (e)=>{
+        e.preventDefault();
+
+        const productData = {
+            title: title.value,
+            description: description.value,
+            code: code.value,
+            price: price.value,
+            status: status.value,
+            stock: stock.value,
+            category: category.value,
+            thumbnails: thumbnails.value
+        };
+
+        socket.emit("new product", productData);
+    });
+
+    const createProductCardHTML = (product) => {
+        return `
+            <div class="productCard">
+                <li>
+                    <img src="${product.thumbnails}" alt="imagen producto" class="productImage">
+                    <h2>${product.title}</h2>
+                    <h3>Precio: $${product.price}</h3>
+                    <button class="delete-product-button" data-pid=${product.id}>Eliminar</button>
+                </li>
+            </div>
+        `;
+    };
+
+    //con un socket on tomamos la lista de productos actualizada desde io
+    socket.on("products updated", (data)=>{
+        const pContainer = document.getElementById("productsCardsContainer");
+        let htmlContent = "";
+        data.products.forEach((product)=>{
+            htmlContent += createProductCardHTML(product);
+        });
+        pContainer.innerHTML = htmlContent;
+    });
+
+    document.body.addEventListener("click", (e)=>{
+        if(e.target.classList.contains('delete-product-button')){
+            e.preventDefault();
+            const pid = e.target.dataset.pid;
+            socket.emit("delete product", pid);
+        };
+    });
+</script>
