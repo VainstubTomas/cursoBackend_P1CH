@@ -3,6 +3,7 @@ import http from "http";
 import dotenv from "dotenv";
 import {engine} from "express-handlebars";
 import viewsRouter from "./routes/views.router.js";
+import productsRouter from "./routes/products.router.js";
 import connectMongoDB from "./config/db.js";
 
 //variables de entorno
@@ -23,6 +24,7 @@ app.set("views", "./src/views");
 
 //endpoints
 app.use("/", viewsRouter);
+app.use("/api/products", productsRouter);
 
 server.listen(8080, ()=>{
     console.log("Servidor iniciado correctamente en el puerto 8080");

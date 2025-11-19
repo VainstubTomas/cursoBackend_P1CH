@@ -1,0 +1,43 @@
+body{
+    margin-left: 20px;
+}
+
+.productImage{
+    height: auto;
+    max-width: 300px;
+}
+
+#addProductsForm{
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    gap: 5px;
+}
+
+li{
+    list-style: none;
+}
+
+.display-1{
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.display-2{
+    font-size: 30px;
+}
+
+.display-3{
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.display-4{
+    font-size: 20px;
+}
+
+.card{
+    margin: 20px;
+    padding: 5px;
+    max-width: 350px;
+}
