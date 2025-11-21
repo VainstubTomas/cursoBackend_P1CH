@@ -21,4 +21,15 @@ viewsRouter.get("/", async(req, res)=>{
     }
 });
 
+//view de la descripcion
+viewsRouter.get("/product/:pid", async (req, res)=>{
+    try {
+        const pid = req.params.pid;
+        const product = await Product.findById(pid , null, {lean:true});
+        res.render("productDescription", {product});
+    } catch (error) {
+        res.status(500).json({status:"error", message: error.message});
+    }
+})
+
 export default viewsRouter;

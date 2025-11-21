@@ -1,0 +1,20 @@
+<div id="descriptionPage">
+    <header id="ecommerceHeader">
+        <a href="/"><h1 class="display-1" id="mainIcon">Apple Prods</h1></a>
+        <img src="/images/ShoppingCartRounded.png" alt="imagen carrito" id="carritoIcon">
+    </header>
+
+    <div id="cardContainer">
+        <div id="individualCardDescription" class="card">
+            <img src={{product.thumbnails}} alt="img product" id="descriptionImg">
+            <div id="productInfo">
+                <h1>{{product.title}}</h1>
+                <h2>{{product.description}}</h2>
+                <h3>${{product.price}}</h3>
+                <h4>Stock: {{product.stock}}</h4>
+                <h4>Category: {{product.category}}</h4>
+                <button id="addButton" type="button" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </div> 
+</div>
