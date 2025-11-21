@@ -4,7 +4,7 @@ import paginate from "mongoose-paginate-v2";
 const productSchema = new mongoose.Schema({
     title: String,
     description: {type:String, index: "text"},
-    thumbnails: {type: String, default: ""},
+    thumbnails: {type: Array, default: []},
     code: {type: String, unique: true},
     price: Number,
     stock: Number,
