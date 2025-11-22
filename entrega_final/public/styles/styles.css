@@ -15,8 +15,18 @@ body{
     cursor: pointer;
 }
 
+#searchCartByCID{
+    display: flex;
+}
+
+#cidInputHeader{
+    width: 300px;
+    margin-right: 10px;
+}
+
 #carritoIcon{
     cursor: pointer;
+    height: 30px;
 }
 
 .productImage{
@@ -113,13 +123,42 @@ li{
     font-weight: lighter;
 }
 
+#cidInput{
+    width: 380px;
+    margin-top: 90px;
+}
+
+#quantityInput{
+    width: 380px;
+    margin-top: 5px;
+}
+
 #addButton{
     width: 100px;
     height: 40px;
-    margin: 150px 0px 0px 280px;
+    margin-top: 5px;
+    margin-left: 280px;
 }
 
 a{
    color: inherit;
     text-decoration: none; 
+}
+
+/* CARRITO */
+
+#cartInfo{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+#liProductsCart{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#deleteAll{
+    width: 200px;
 }

@@ -1,7 +1,17 @@
 <div id="descriptionPage">
     <header id="ecommerceHeader">
         <a href="/"><h1 class="display-1" id="mainIcon">Apple Prods</h1></a>
-        <img src="/images/ShoppingCartRounded.png" alt="imagen carrito" id="carritoIcon">
+        <div id="searchCartByCID">
+            <form id="searchForm" method="get" class="d-flex gap-2">
+            
+                <input  class="form-control" type="text" name="cid" id="cidInputHeader" placeholder="Search your cart with the id" required>
+                <button type="submit" class="btn btn-primary d-flex align-items-center">
+                    <img src="/images/ShoppingCartRounded.png" alt="imagen carrito" id="carritoIcon">
+                </button>
+                
+
+            </form>
+        </div>
     </header>
 
     <div id="cardContainer">
@@ -13,8 +23,68 @@
                 <h3>${{product.price}}</h3>
                 <h4>Stock: {{product.stock}}</h4>
                 <h4>Category: {{product.category}}</h4>
-                <button id="addButton" type="button" class="btn btn-primary">Add</button>
+
+                <form id="addForm" method="post">
+                    <input  class="form-control" type="text" name="cid" id="cidInput" placeholder="Cart id" required>
+                    <input class="form-control" type="number" name="quantity" id="quantityInput" value="1" min="1">
+                    <button id="addButton" type="submit" class="btn btn-primary">Add</button>
+                </form>
+
             </div>
         </div>
     </div> 
 </div>
+
+<script>
+    const searchForm = document.getElementById('searchForm');
+    const cidInput = document.getElementById('cidInputHeader');
+
+    const addForm = document.getElementById('addForm');
+    const cidAddInput = document.getElementById('cidInput');
+
+
+    searchForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const cartId = cidInput.value;
+        
+        if (cartId) {
+            window.location.href = `/carts/${cartId}`;
+        } else {
+            alert("Por favor, introduce un ID de carrito.");
+        }
+    });
+
+    //extraer id del producto desde la url
+    const getProductIdFromURL = () => {
+        const path = window.location.pathname;
+        
+        const segments = path.split('/').filter(segment => segment !== '');
+        
+        return segments.pop(); 
+    };
+
+    addForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const productId = getProductIdFromURL(); //PID extraído de la URL
+        const cartId = document.getElementById('cidInput').value;
+        const quantity = document.querySelector('input[name="quantity"]').value; 
+        
+        const bodyData = { quantity: parseInt(quantity) };
+
+        try {
+            const response = await fetch(`/api/carts/${cartId}/product/${productId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyData)
+            });
+            console.log("post ok");
+
+            addForm.reset();
+            
+        } catch (error) {
+            res.status(500).json({status:error, message:error});
+        }
+    });
+</script>

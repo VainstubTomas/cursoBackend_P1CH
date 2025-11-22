@@ -1,0 +1,126 @@
+<div>
+    <header id="ecommerceHeader">
+        <a href="/"><h1 class="display-1" id="mainIcon">Apple Prods</h1></a>
+        <div id="searchCartByCID">
+            <form id="searchForm" method="get" class="d-flex gap-2">
+            
+                <input  class="form-control" type="text" name="cid" id="cidInputHeader" placeholder="Search your cart with the id" required>
+                <button type="submit" class="btn btn-primary d-flex align-items-center">
+                    <img src="/images/ShoppingCartRounded.png" alt="imagen carrito" id="carritoIcon">
+                </button>
+                
+            </form>
+        </div>
+    </header>
+
+    <div id="cartCardContainer">
+        <div id="cartCard" class="card">
+            <div id="cartInfo">
+                <h2>CID: {{cart._id}}</h2>
+                <h4>Date: {{cart.createdAt}}</h4>
+                <hr>
+                <h2>Products:</h2>
+                <button class="delete-all-products-btn btn btn-danger" id="deleteAll" data-cid="{{cart._id}}">Delete all</button>
+                <ul id="productList">
+                    {{#each cart.products}}
+                        <hr>
+                        <li id="liProductsCart">
+                            Producto: <b>{{this.product.title}}</b> (Cant: {{this.quantity}})
+                            <button 
+                                class="delete-product-btn btn btn-danger" 
+                                data-pid="{{this.product._id}}" 
+                                data-cid="{{@root.cart._id}}"> Delete
+                            </button>
+                        </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchForm = document.getElementById('searchForm');
+    const cidInput = document.getElementById('cidInputHeader');
+    const deleteAllButton = document.querySelector('.delete-all-products-btn'); 
+
+    searchForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const cartId = cidInput.value;
+        
+        if (cartId) {
+            window.location.href = `/carts/${cartId}`;
+        } else {
+            alert("Por favor, introduce un ID de carrito.");
+        }
+    });
+
+    //eliminar Producto
+
+    document.body.addEventListener('click', async (e) => {
+    if (e.target.classList.contains('delete-product-btn')) {
+        e.preventDefault(); 
+        
+        const pid = e.target.dataset.pid;
+        const cid = e.target.dataset.cid; 
+
+        if (!cid || !pid) {
+            console.error("Error: Falta el CID o PID en el botón.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/carts/${cid}/product/${pid}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                console.log(`Producto ${pid} eliminado del carrito ${cid}.`);
+                alert("Producto eliminado.");
+                
+                window.location.reload(); 
+            } else {
+                const errorData = await response.json();
+                console.error('Error al eliminar:', errorData.message);
+                alert(`Error al eliminar: ${errorData.message}`);
+            }
+        } catch (error) {
+            console.error('Fallo de red:', error);
+        }
+    }
+});
+
+    //vaciar carrito
+    if (deleteAllButton) {
+        deleteAllButton.addEventListener('click', async (e) => {
+            e.preventDefault(); 
+
+            const cartId = deleteAllButton.dataset.cid; 
+
+            if (!cartId) {
+                console.error("Error: ID del carrito no encontrada en el botón.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/carts/${cartId}`, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    console.log(`Todos los productos eliminados del carrito: ${cartId}`);
+                    alert("Carrito vaciado con éxito!");
+                    
+                    window.location.reload(); 
+                } else {
+                    const errorData = await response.json();
+                    console.error('Error del servidor:', errorData.message);
+                    alert(`Error al vaciar carrito: ${errorData.message}`);
+                }
+            } catch (error) {
+                console.error('Fallo de red al intentar vaciar carrito:', error);
+            }
+        });
+    }
+</script>

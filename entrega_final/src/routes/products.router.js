@@ -6,8 +6,31 @@ const productsRouter = express.Router();
 
 productsRouter.get("/", async(req, res)=>{
     try {
-        const {limit=10, page=1} = req.query;
-        const data = await Product.paginate({}, {limit, page});
+        const {limit=10, page=1, category, available, sort} = req.query;
+
+        let filter = {};
+        let sortOptions = {};
+
+        if (category) {
+            filter.category = category
+        }
+
+        if (available === 'true') {
+            filter.stock = { $gt: 0 };
+        }
+
+        if (sort) {
+            sortOptions.price = (sort === 'asc' || sort === '1') ? 1 : -1; 
+        }
+
+        const options = {
+            limit: parseInt(limit),
+            page: parseInt(page),
+            sort: sortOptions, 
+            lean: true     
+        };
+
+        const data = await Product.paginate(filter, options);
         const products = data.docs;
         delete data.docs
         res.status(200).json({status:"success", payload: products, ...data});
