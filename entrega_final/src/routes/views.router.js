@@ -24,29 +24,24 @@ viewsRouter.get("/", async(req, res)=>{
 
         const links = [];
 
-        // Copiamos los queries actuales y eliminamos 'page' para que no se duplique
         const currentQueries = { ...req.query };
         delete currentQueries.page;
         const baseQueryString = new URLSearchParams(currentQueries).toString();
         
         for (let index = 1; index <= data.totalPages; index++) {
-             // 🟢 Incluye todos los filtros y el ordenamiento en la URL
              const link = `/?page=${index}&${baseQueryString}`; 
 
              links.push({
                  text: index, 
                  link: link,
-                 isCurrent: index === data.page // Para resaltar la página actual
+                 isCurrent: index === data.page 
              });
         }
 
-        // 5. Renderizar
-        // Enviamos la metadata (totalPages, hasNextPage, etc.) y los links
         res.render("index", { 
             products, 
             links, 
-            ...data, // Enviamos toda la metadata de paginación
-            // También enviamos las variables de filtro para que el Handlebars las use
+            ...data,
             limit: limit, 
             category: category, 
             sort: sort 
