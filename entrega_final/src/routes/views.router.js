@@ -7,17 +7,50 @@ const viewsRouter = express.Router();
 viewsRouter.get("/", async(req, res)=>{
     try {
 
-        const {limit=10, page=1} = req.query;
-        const data = await Product.paginate({}, {limit, page, lean: true});
+        const {limit=10, page=1, category, available, sort} = req.query;
+        //objeto de filtro y ordenamiento
+        let filter = {};
+        let sortOptions = {};
+
+        const options = {
+            limit: parseInt(limit),
+            page: parseInt(page),
+            sort: sortOptions, 
+            lean: true
+        }
+
+        const data = await Product.paginate(filter, options);
         const products = data.docs;
 
         const links = [];
 
-        for(let index = 1; index <= data.totalPages; index++){
-            links.push({text: index, link: `?limit=${limit}&page${index}`});
+        // Copiamos los queries actuales y eliminamos 'page' para que no se duplique
+        const currentQueries = { ...req.query };
+        delete currentQueries.page;
+        const baseQueryString = new URLSearchParams(currentQueries).toString();
+        
+        for (let index = 1; index <= data.totalPages; index++) {
+             // 🟢 Incluye todos los filtros y el ordenamiento en la URL
+             const link = `/?page=${index}&${baseQueryString}`; 
+
+             links.push({
+                 text: index, 
+                 link: link,
+                 isCurrent: index === data.page // Para resaltar la página actual
+             });
         }
 
-        res.render("index", {products, links});
+        // 5. Renderizar
+        // Enviamos la metadata (totalPages, hasNextPage, etc.) y los links
+        res.render("index", { 
+            products, 
+            links, 
+            ...data, // Enviamos toda la metadata de paginación
+            // También enviamos las variables de filtro para que el Handlebars las use
+            limit: limit, 
+            category: category, 
+            sort: sort 
+        });
     } catch (error) {
         res.status(500).json({status:"error", message: error.message});
     }

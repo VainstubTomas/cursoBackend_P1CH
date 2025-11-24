@@ -162,3 +162,12 @@ a{
 #deleteAll{
     width: 200px;
 }
+
+/* paginacion */
+
+#paginationNav{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 8px;
+}
